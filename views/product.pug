@@ -1,0 +1,60 @@
+extends partials/layout
+
+block vars
+  - const title = 'Amazon Crawl';
+  - const pageID = 'product';
+
+block eod
+  script
+    +loadModule('pages/product.js')
+
+block content
+  main
+    div(class='header')
+    if error
+      div(class='flex justify-center center')
+        div(class='text-center')
+          p(class='oops') Oops!
+          h2 there is an error, try again
+          h2= error
+          a(class='submit' href='/') GO TO HOMEPAGE
+    else
+      div(class='m-10')
+        div(class='breadcrumbs')
+          each val in product.breadCrumbs
+            div
+              a(href=val.link target='_blank')=val.name
+              span(class='arrow') ›
+        div(class='flex')
+          div(class='img-container relative')
+            div
+              img(class='' id='main-img' src=product.mainImage alt='main-image') 
+              if product.images.length>0
+              img(class='bg-img' id='bg-img' src=product.images[0] alt='secondary-image') 
+          div(class='ml-2')
+            h1=product.brand
+            h4=product.name
+            if product.price
+              p=product.price
+            a(href=product.byLineInfo.link target='_blank')=product.byLineInfo.name
+            div(class='rating')
+              span=product.customerReview+' - '+product.customerReviewCount+ ' ratings'
+            hr
+            div 
+              h3 About this item
+              ul
+                each val in product.features
+                  li= val
+            hr
+            div 
+              h3 Product details
+              div(class='details ml-6')
+                each val in product.productInformation
+                  div 
+                    span(class='bold')=val.name 
+                    span= ' : '
+                    span=val.value
+            hr
+            div
+              h3 Description 
+              p(class='ml-6')=product.description
